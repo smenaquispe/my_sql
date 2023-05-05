@@ -1,6 +1,8 @@
 #include<iostream>
 #include<regex>
-#include"test.cpp"
+
+#include"classes/db/db.h"
+
 using namespace std;
 
 bool isOpen = true;
@@ -8,12 +10,15 @@ bool inSession = false;
 
 void init(char * input);
 void quit(char * input);
-void select(char * input);
+void select(char * input, DB & db);
 
 int main() {
 
     size_t lenInput = 256;
     char input[lenInput];
+
+    // create db controller
+    DB db;
 
     do{
         if(!inSession) cout<<"% ";
@@ -28,7 +33,7 @@ int main() {
 
         if(inSession) {
             if(input[0] == '&')
-                select(input);
+                select(input, db);
         }
 
     } while(isOpen);
@@ -57,7 +62,7 @@ void quit(char * input) {
 }
 
 // select funciont 
-void select(char * input) {
+void select(char * input, DB & db) {
 
     regex select_pattern("& SELECT (.*) FROM (.*) #",regex_constants::icase);
     smatch match;
@@ -66,15 +71,21 @@ void select(char * input) {
     string strInput = string(input);
     if (regex_search(strInput, match, select_pattern)) {
 
-        const char * columnNames = match[1].str().c_str();
-        const char * tableName = match[2].str().c_str();
+        char * columnNames = strdup(match[1].str().c_str());
+        char * tableName = strdup(match[2].str().c_str());
+
+        db.setTable(tableName);
 
         // select all
-        if(!strcmp(columnNames, "*")) printTable(tableName);
+        if(!strcmp(columnNames, "*")) db.printTable();
 
         // select column names
         else {
-            saveColumns(columnNames, tableName);
+            db.setColumns(columnNames);
+            db.saveColumns();
         }
+
+        free(columnNames);
+        free(tableName);
     }
 }
