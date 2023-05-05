@@ -2,15 +2,11 @@
 #include<regex>
 
 #include"classes/db/db.h"
+#include"classes/controller/dbController.h"
 
 using namespace std;
 
 bool isOpen = true;
-bool inSession = false;
-
-void init(char * input);
-void quit(char * input);
-void select(char * input, DB & db);
 
 int main() {
 
@@ -18,74 +14,29 @@ int main() {
     char input[lenInput];
 
     // create db controller
-    DB db;
+    DB * db = new DB;
+    DbController controller(db);
 
     do{
-        if(!inSession) cout<<"% ";
+        if(!controller.inSession) cout<<"% ";
         else cout<<"> ";
 
         cin.getline(input, lenInput);
  
         if(input == "\n") continue;
 
-        init(input);
-        quit(input);
+        controller.init(input);
+        controller.quit(input);
 
-        if(inSession) {
+        if(controller.inSession) {
             if(input[0] == '&')
-                select(input, db);
+                controller.select(input);
         }
 
     } while(isOpen);
 
+
+    delete db;
+
     return 0;
-}
-
-/* to join the session of megatron 3000 */
-void init(char * input) {
-    regex pattern("MEGATRON3000", regex_constants::icase);
-    if (regex_match(input, pattern)) {
-        if(inSession) cout<<"You've already stayed in MEGATRON3000\n";
-        else {
-            cout<<"Welcome to MEGATRON 3000 !\n";     
-            inSession = true;
-        }
-    } 
-}
-
-/** break the session but not quit the program */
-void quit(char * input) {
-    regex pattern("QUIT", regex_constants::icase);
-    if (regex_match(input, pattern)){
-        inSession = false;
-    }
-}
-
-// select funciont 
-void select(char * input, DB & db) {
-
-    regex select_pattern("& SELECT (.*) FROM (.*) #",regex_constants::icase);
-    smatch match;
-
-    // Intentamos buscar la cláusula SELECT
-    string strInput = string(input);
-    if (regex_search(strInput, match, select_pattern)) {
-
-        char * columnNames = strdup(match[1].str().c_str());
-        char * tableName = strdup(match[2].str().c_str());
-
-        db.setTable(tableName);
-
-        // select all
-        if(!strcmp(columnNames, "*")) db.printTable();
-
-        // select column names
-        else {
-            db.setColumns(columnNames);
-            db.saveColumns();
-        }
-
-        free(columnNames);
-        free(tableName);
-    }
 }
