@@ -10,7 +10,7 @@ using namespace std;
 
 vector< vector<string> > readTable(
     string nameTable, 
-    vector<int> positions = {}
+    vector<int> columns = {}
 ) {
     
     ifstream file("./db/" + nameTable);
@@ -22,10 +22,10 @@ vector< vector<string> > readTable(
         {
             vector<string> row = splitString(line,'#');
 
-            if(positions.size() > 0) {
+            if(columns.size() > 0) {
                 vector<string> customRow;
-                for(const int p : positions) {
-                    customRow.push_back(row.at(p));
+                for(const int c : columns) {
+                    customRow.push_back(row.at(c));
                 }
                 content.push_back(customRow);
 
