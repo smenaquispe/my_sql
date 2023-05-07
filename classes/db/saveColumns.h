@@ -8,7 +8,7 @@ void DB::saveColumns() {
     char * columns = this->columnsSelected;
     char * token = strtok(columns, ",");
 
-    ofstream file("./db/columns");
+    ofstream file("./db/input_columns");
 
     file<<this->tableName;
     while (token != nullptr)

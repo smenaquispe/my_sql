@@ -32,6 +32,7 @@ class DB
         void printTable();
         void saveColumns();
         void createSchema();
+        void createTable();
 };
 
 DB::DB()
@@ -50,5 +51,6 @@ DB::~DB()
 #include"printTable.h"
 #include"saveColumns.h"
 #include"createSchema.h"
+#include"createTable.h"
 
 #endif

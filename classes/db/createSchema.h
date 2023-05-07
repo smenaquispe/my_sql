@@ -7,10 +7,11 @@ void DB::createSchema() {
 
     ifstream schemasFile("./db/schema");
     ofstream tempSchemaFile("./db/tempSchema");
+    ofstream columnsFile("./db/columns");
 
-    FILE* columnsFile = fopen("./db/columns", "r");
+    FILE* inputColumnsFile = fopen("./db/input_columns", "r");
     char tempBuffer[1024];
-    fgets(tempBuffer, 1024, columnsFile);
+    fgets(tempBuffer, 1024, inputColumnsFile);
 
     if(newSchemaName != nullptr)
         tempSchemaFile<<this->newSchemaName;
@@ -22,17 +23,27 @@ void DB::createSchema() {
         int pos = 0;
         while (schemasFile.getline(this->buffer + pos, this->lenBuffer)) {
             char* token = strtok(this->buffer + pos, " # ");
-            if(!strcmp(token,this->tableName)) {                
+            if(!strcmp(token,this->tableName)) {         
+
+                columnsFile<<this->tableName<<" ";
+
                 bool isType = false;
                 while(token != nullptr) {
                     if(strcmp(token, this->tableName)) { // no guardar el nombre de la tabla
+                        
                         if(isType) { // si es un tipo de datos
                             isType = false;
                             tempSchemaFile<<" # "<<token;
                         }
-                        else if(strstr(tempBuffer, token)) { // si token se encuentra en las columnas
+
+                        if(strstr(tempBuffer, token)) { // si token se encuentra en las columnas
                             isType = true;
                             tempSchemaFile<<" # "<<token;
+                            columnsFile<<"1";
+
+                        } else {
+                            if(!isType)
+                                columnsFile<<"0";
                         }
                     }
                     token = strtok(nullptr, " # ");
