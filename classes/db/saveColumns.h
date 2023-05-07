@@ -3,6 +3,7 @@
 
 #include"db.h"
 
+/* save the columns and name of table in a file */
 void DB::saveColumns() {
     char * columns = this->columnsSelected;
     char * token = strtok(columns, ",");
@@ -19,6 +20,5 @@ void DB::saveColumns() {
               
     file.close();
 }
-
 
 #endif

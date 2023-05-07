@@ -27,6 +27,10 @@ void DB::printHeader() {
                 } 
                 cout<<endl;
             }
+
+            if(pos >= sizeof(this->buffer)) {
+                pos = 0;
+            }
         }
     } else {
         cout<<"Can't open file"<<"./db/schema"<<endl;

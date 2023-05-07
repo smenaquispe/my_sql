@@ -12,6 +12,7 @@ class DB
     private:
         char * tableName;
         char * columnsSelected;
+        char * newSchemaName;
 
         size_t lenBuffer;
         char * buffer;
@@ -25,16 +26,19 @@ class DB
         // setters
         void setTable(char * tableName);
         void setColumns(char * columnNames);
+        void setNewSchemaName(char * schemaName);
 
         // other functions
         void printTable();
         void saveColumns();
+        void createSchema();
 };
 
 DB::DB()
 {
     lenBuffer = 1024;
     buffer = new char[lenBuffer];
+    newSchemaName = nullptr;
 }
 
 DB::~DB()
@@ -45,5 +49,6 @@ DB::~DB()
 #include"setters.h"
 #include"printTable.h"
 #include"saveColumns.h"
+#include"createSchema.h"
 
 #endif

@@ -11,4 +11,8 @@ void DB::setColumns(char * columnNames) {
     this->columnsSelected = columnNames;
 }
 
+void DB::setNewSchemaName(char * schemaName) {
+    this->newSchemaName = schemaName;
+}
+
 #endif
