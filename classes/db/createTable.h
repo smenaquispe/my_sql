@@ -44,8 +44,7 @@ void DB::createTable() {
                     }
                     tempTableFile<<token;
                 }
-
-
+                
                 pos_column += 2;
                 token = strtok(nullptr, " # ");
             }

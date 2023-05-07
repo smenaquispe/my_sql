@@ -4,13 +4,25 @@
 #include"db.h"
 
 void DB::printTable() {
-    printHeader();
-    printBody();
+    printHeader(false);
+    printBody(false);
 }
 
+void DB::printNewTable() {
+    printHeader(true);
+    printBody(true);
+}
 
-void DB::printHeader() {
-    ifstream schemasFile("./db/schema");
+void DB::printHeader(bool newTable = false) {
+
+    ifstream schemasFile;
+
+    if(newTable) {
+        schemasFile.open("./db/tempSchema");
+        setTable(this->newSchemaName);
+    } else {
+        schemasFile.open("./db/schema");
+    }
 
     if (schemasFile.is_open()) {
         int pos = 0;
@@ -39,11 +51,17 @@ void DB::printHeader() {
     schemasFile.close();
 }
 
-void DB::printBody() {
+void DB::printBody(bool newTable = false) {
     // print row of the table
     char fileName[256];
-    strcpy(fileName, "./db/tables/");
-    strcat(fileName, this->tableName);
+
+    if(newTable) {
+        strcpy(fileName, "./db/tempTable");
+    }else {
+        strcpy(fileName, "./db/tables/");
+        strcat(fileName, this->tableName);
+    }
+
     ifstream tableFile(fileName);
 
     if (tableFile.is_open()) {

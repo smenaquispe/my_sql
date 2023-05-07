@@ -26,6 +26,7 @@ void DbController::select(char * input) {
             db->saveColumns();
             db->createSchema();
             db->createTable();
+            db->printNewTable();
         }
 
         free(columnNames);

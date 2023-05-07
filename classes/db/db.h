@@ -14,11 +14,13 @@ class DB
         char * columnsSelected;
         char * newSchemaName;
 
+        char *defaultName;
+
         size_t lenBuffer;
         char * buffer;
 
-        void printHeader();
-        void printBody();
+        void printHeader(bool);
+        void printBody(bool);
     public:
         DB();
         ~DB();
@@ -30,6 +32,7 @@ class DB
 
         // other functions
         void printTable();
+        void printNewTable();
         void saveColumns();
         void createSchema();
         void createTable();
@@ -39,12 +42,16 @@ DB::DB()
 {
     lenBuffer = 1024;
     buffer = new char[lenBuffer];
-    newSchemaName = nullptr;
+    newSchemaName = NULL;
+
+    defaultName = new char[12];
+    strcpy(defaultName,"default_name");
 }
 
 DB::~DB()
 {
     delete buffer;
+    delete [] defaultName;
 }
 
 #include"setters.h"

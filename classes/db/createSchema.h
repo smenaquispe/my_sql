@@ -13,11 +13,11 @@ void DB::createSchema() {
     char tempBuffer[1024];
     fgets(tempBuffer, 1024, inputColumnsFile);
 
-    if(newSchemaName != nullptr)
-        tempSchemaFile<<this->newSchemaName;
-    else {
-        tempSchemaFile<<"default_name";
+    if(newSchemaName == NULL){
+        setNewSchemaName(defaultName);
     }
+    
+    tempSchemaFile<<this->newSchemaName;
 
     if(schemasFile.is_open()) {
         int pos = 0;
