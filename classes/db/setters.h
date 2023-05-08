@@ -15,4 +15,16 @@ void DB::setNewSchemaName(char * schemaName) {
     this->newSchemaName = schemaName;
 }
 
+void DB::setColumnCompare(char * columnCompare) {
+    this->columnCompare = columnCompare;
+}
+
+void DB::setValueCompare(char * valueCompare) {
+    this->valueCompare = valueCompare;
+}
+
+void DB::setCondition(bool (*condition)(char *, char *)) {
+    this->condition = condition;
+}
+
 #endif

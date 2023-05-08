@@ -11,6 +11,11 @@ class DbController
         const char * init_pattern = "MEGATRON3000";
         const char * quit_pattern = "QUIT";
         const char * select_pattern = "& SELECT (.*) FROM (.*) #";
+        const char * select_where_pattern = "& SELECT (.*) FROM (.*) WHERE (.*) #";
+        const char * clause_pattern = R"((\w+)\s*([><=!]+)\s*(\w+))";
+
+        // comparision (where clause)
+        char * clause;
 
     public:
         bool inSession;
@@ -21,6 +26,7 @@ class DbController
         void init(char * input);
         void quit(char * input);
         void select(char * input);
+        void parseClause(char * clause);
 };
 
 DbController::DbController(DB * db)
@@ -35,5 +41,6 @@ DbController::~DbController()
 
 #include"session.h"
 #include"select.h"
+#include"parseClause.h"
 
 #endif
