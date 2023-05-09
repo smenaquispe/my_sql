@@ -20,12 +20,13 @@ class DB
         char * columnCompare;
         char * valueCompare;
         bool (*condition)(char *, char *);
+        bool isWhereCondition;
 
         size_t lenBuffer;
         char * buffer;
 
         void printHeader(bool);
-        void printBody(bool);
+        void printBody();
 
     public:
         DB();
@@ -56,6 +57,8 @@ DB::DB()
 
     defaultName = new char[12];
     strcpy(defaultName,"default_name");
+
+    isWhereCondition = false;
 }
 
 DB::~DB()

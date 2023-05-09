@@ -8,6 +8,7 @@ void DB::createSchema() {
     ifstream schemasFile("./db/schema");
     ofstream tempSchemaFile("./db/tempSchema");
     ofstream columnsFile("./db/columns");
+    ofstream whereValueFile("./db/where_value");
 
     FILE* inputColumnsFile = fopen("./db/input_columns", "r");
     char tempBuffer[1024];
@@ -21,6 +22,7 @@ void DB::createSchema() {
 
     if(schemasFile.is_open()) {
         int pos = 0;
+        int count = 0;
         while (schemasFile.getline(this->buffer + pos, this->lenBuffer)) {
             char* token = strtok(this->buffer + pos, " # ");
             if(!strcmp(token,this->tableName)) {         
@@ -35,7 +37,7 @@ void DB::createSchema() {
                             isType = false;
                             tempSchemaFile<<" # "<<token;
                         }
-
+                    
                         if(strstr(tempBuffer, token)) { // si token se encuentra en las columnas
                             isType = true;
                             tempSchemaFile<<" # "<<token;
@@ -45,9 +47,16 @@ void DB::createSchema() {
                             if(!isType)
                                 columnsFile<<"0";
                         }
+
                     }
+
+                    whereValueFile<<token<<endl;
+                    cout<<count<<endl;
+                    count++;
+
                     token = strtok(nullptr, " # ");
                 } 
+
                 break;
             }
 
@@ -58,6 +67,8 @@ void DB::createSchema() {
     } else {
         cout<<"Can't open file"<<"./db/schema"<<endl;
     }
+
+    whereValueFile.close();
 }
 
 #endif

@@ -23,9 +23,10 @@ void DbController::select(char * input) {
 
         // where clause
         if(regex_search(strInput, match, pattern2)) {
+            free(tableName);
+            tableName = strdup(match[2].str().c_str());
             clause = strdup(match[3].str().c_str());
             this->parseClause(clause);
-            return;
         }
     } else {
         return;
@@ -34,20 +35,21 @@ void DbController::select(char * input) {
     db->setTable(tableName);
 
     // select all
-    if(!strcmp(columnNames, "*")) db->printTable();
+    if(!strcmp(columnNames, "*")) {
+        db->printTable();   
+    } 
 
     // select column names
     else {
         db->setColumns(columnNames);
-        db->saveColumns();
         db->createSchema();
-        db->createTable();
         db->printNewTable();
     }
 
     free(columnNames);
     free(tableName);
-    free(clause);
+    //free(clause);
+
 }
 
 #endif

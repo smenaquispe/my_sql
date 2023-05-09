@@ -29,8 +29,9 @@ int main() {
         controller.quit(input);
 
         if(controller.inSession) {
-            if(input[0] == '&')
+            if(input[0] == '&') {
                 controller.select(input);
+            }
         }
 
     } while(isOpen);

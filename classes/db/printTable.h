@@ -5,16 +5,17 @@
 
 void DB::printTable() {
     printHeader(false);
-    printBody(false);
+    printBody();
 }
 
 void DB::printNewTable() {
     printHeader(true);
-    printBody(true);
+    createTable();
 }
 
 void DB::printHeader(bool newTable = false) {
 
+    ofstream whereValueFile("./db/where_value");
     ifstream schemasFile;
 
     if(newTable) {
@@ -26,41 +27,46 @@ void DB::printHeader(bool newTable = false) {
 
     if (schemasFile.is_open()) {
         int pos = 0;
+        int count = 0;
         while (schemasFile.getline(this->buffer + pos, this->lenBuffer)) {
             char* token = strtok(this->buffer + pos, " # ");
             if(!strcmp(token,this->tableName)) {
                 bool show = false;
                 while(token != nullptr) {
                     if(show){
+                        
+                        if(whereValueFile && !strcmp(token, this->columnCompare)){ 
+                            whereValueFile<<count<<endl;
+                        }
+
                         cout<<setw(20)<<left<<token<<setw(20)<<right;
                         show = false;
+                        count++;
                     } else show = true;
                     token = strtok(nullptr, " # ");
                 } 
                 cout<<endl;
             }
 
+
             if(pos >= sizeof(this->buffer)) {
                 pos = 0;
             }
+
         }
     } else {
         cout<<"Can't open file"<<"./db/schema"<<endl;
     }
-
+    
     schemasFile.close();
 }
 
-void DB::printBody(bool newTable = false) {
+void DB::printBody() {
     // print row of the table
     char fileName[256];
 
-    if(newTable) {
-        strcpy(fileName, "./db/tempTable");
-    }else {
-        strcpy(fileName, "./db/tables/");
-        strcat(fileName, this->tableName);
-    }
+    strcpy(fileName, "./db/tables/");
+    strcat(fileName, this->tableName);
 
     ifstream tableFile(fileName);
 

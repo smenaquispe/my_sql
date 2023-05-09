@@ -9,6 +9,7 @@ void DB::setTable(char * tableName) {
 
 void DB::setColumns(char * columnNames) {
     this->columnsSelected = columnNames;
+    saveColumns();
 }
 
 void DB::setNewSchemaName(char * schemaName) {
@@ -25,6 +26,7 @@ void DB::setValueCompare(char * valueCompare) {
 
 void DB::setCondition(bool (*condition)(char *, char *)) {
     this->condition = condition;
+    this->isWhereCondition = true;
 }
 
 #endif

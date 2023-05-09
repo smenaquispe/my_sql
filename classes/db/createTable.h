@@ -28,8 +28,7 @@ void DB::createTable() {
     if(tableFile.is_open()) {
         int pos = 0;
         while (tableFile.getline(this->buffer + pos, this->lenBuffer))
-        {
-            
+        {   
             // una linea
             char* token = strtok(this->buffer + pos, " # ");
             int pos_column = 0;
@@ -42,6 +41,8 @@ void DB::createTable() {
                     } else {
                         first = false;
                     }
+
+                    cout<<setw(20)<<left<<token;
                     tempTableFile<<token;
                 }
                 
@@ -49,6 +50,7 @@ void DB::createTable() {
                 token = strtok(nullptr, " # ");
             }
 
+            cout<<endl;
             tempTableFile<<endl;
 
             pos += tableFile.gcount();
